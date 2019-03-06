@@ -1,0 +1,312 @@
+#!/bin/bash
+####################################################################
+# Author: Ivan Timothy Halim
+# Class: CS344, Assignment-1
+# Date: January 27th 2019
+# Description: Performs matrix operations add, multiply, transpose,
+# and dimensions
+####################################################################
+
+# Create temporary files for input
+tmp="tempfile"
+tmp2="tempfile2"
+
+# Tell the computer to catch any of these signals
+# The script will automatically delete temporary files
+# when these signals are detected
+trap "rm -f $tmp; rm -f $tmp2" INT HUP TERM EXIT
+
+# Get the dimensions of a matrix file
+# sends dimensions to stdin
+dims() {
+
+	# Check if we have the right number of arguments
+	if [ $# -gt 1 ] # If arg count is grater than 1
+        then
+                echo "Failed: too many arguments." 1>&2
+                exit 1
+        elif [ $# -lt 1 ] # If arg is less than 1
+        then
+		# Take input from stdin and put it in tempfile
+                cat > "tempfile"
+        else
+		# Otherwise just use the first argument
+                tmp=$1
+        fi
+
+	# Count the number of rows in tmp
+	rows=$(wc -l < $tmp)
+
+	# The number of cols is the number of words in the first row
+	cols=$(head -1 $tmp | wc -w)
+
+	echo "$rows $cols"
+}
+
+# Transpose a MxN matrix into a NxM matrix
+# This is done by cutting each column in the matrix
+# and pasting it horizontally
+transpose() {
+
+	# Check if we have the right number of arguments
+	if [ $# -gt 1 ]	# If arg is greater than 1
+        then
+                echo "Failed: too many arguments." 1>&2
+                exit 1
+        elif [ $# -lt 1 ] # If arg is less than 1
+        then
+		# Take input from stdin and put it in tempfile
+                cat > "tempfile"
+	elif [ ! -r $1 ] # If file is unreadable
+	then
+		echo "Failed: unreadable file." 1>&2
+		exit 1
+        else
+		# Otherwise just use the first argument
+                tmp=$1
+        fi
+
+	# Find the number of cols
+	cols=$(head -1 $tmp | wc -w)
+
+	# For each cols in matrix
+	for ((i=1; i<=cols; i++))
+	do
+		# We cut the columns and paste it horizontally
+		cut -f $i $tmp | paste -s
+	done
+}
+
+# Function finds the mean of each column in a file
+# This is done by cutting up the columns in the matrix
+# and then adding up the elements in the column
+mean() {
+
+	# Check if we have the right number of arguments
+	if [ $# -gt 1 ] # If arg is greater than 1
+        then
+                echo "Failed: too many arguments." 1>&2
+                exit 1
+        elif [ $# -lt 1 ] # If arg is less than 1
+        then
+		# Take input from stdin and put it in tempfile
+                cat > "tempfile"
+        else
+		# Otherwise just use the first argument
+                tmp=$1
+        fi
+
+	rows=$(wc -l < $tmp) # Find the number of rows
+	cols=$(head -1 $tmp | wc -w) # Find the number of cols
+
+	# For each columns in the matrix
+	for ((i=1; i<=cols; i++))
+	do
+		# We cut the column vertically
+		line=$(cut -f $i $tmp)
+		
+		sum=0
+		# For each number in the column
+		for j in $line
+		do
+			# Add the number into the sum
+			sum=$((sum + j))
+		done
+
+		# The mean is the sum divided by the number of rows
+		mean=$((sum / rows))
+
+		# Next we're going to check if there's any decimal number to be rounded up
+		# by calculating the remainder. 
+		remainder=$((sum - mean * rows))
+		if [ $remainder != 0 ]
+		then
+			remainder=$((remainder * 10))
+			first_decimal=$((remainder / rows))
+
+			# Get the absolute value of the first decimal
+			if [ $first_decimal -lt 0 ]
+			then
+				first_decimal=$((first_decimal * -1))
+			fi
+
+			# If the first decimal is greater than 4
+			if [ $first_decimal -gt 4 ]
+			then
+				# If the mean is negative
+				if [ $mean -lt 0 ]
+				then
+					# Subtract 1 from the mean
+					mean=$((mean - 1))
+				else
+					# Otherwise add 1 to the mean
+					mean=$((mean + 1))
+				fi
+			fi
+		fi
+
+		printf "%d" $mean
+
+		# Only print [TAB] if not end of line
+		if [ $i != $cols ]
+		then
+			printf "\t"
+		fi
+	done
+	printf "\n"	
+}
+
+# Multiply two matrices of size MxN and NxO
+# The columns of matrix 1 must be equal to the rows of matrix 2
+# To improve run-time, we read the matrix into an array before
+# performing the multiplication
+multiply() {
+
+	# Check if we have the right number of arguments
+	if [ $# -gt 2 ] # If arg is greater than 2
+        then
+                echo "Failed: too many arguments." 1>&2
+                exit 1
+        elif [ $# == 1 ] # If only one arg
+        then
+		# Use arg 1
+		tmp=$1
+
+		# Take second arg from stdin and put it in tempfile2
+                cat > "tempfile2"
+        elif [ $# == 0 ] # If no arg
+	then
+		# Take both args from stdin and put it in tempfile and tempfile2
+		cat > "tempfile"
+		cat > "tempfile2"
+	else
+		# Otherwise just use arg 1 and arg 2
+                tmp=$1
+		tmp2=$2
+        fi
+
+	# Check if the cols of matrix 1 and the rows of matrix 2 is the same
+	col1=$(head -1 $tmp | wc -w)
+	row2=$(wc -l < $tmp2)
+	if [ $col1 != $row2 ]
+	then
+		echo "Failed: dimensions do not match." 1>&2
+		exit 1
+	fi
+
+	# Create empty array matrix1 and matrix2
+	matrix1=()
+	matrix2=()
+
+	# Read tmp and put it in array matrix1
+	while IFS=$'\n' read -ra line
+	do
+		matrix1+=($line)
+	done <$tmp
+
+	# Read tmp2 and put it in array matrix2
+	while IFS=$'\n' read -ra line
+        do
+                matrix2+=($line)
+        done <$tmp2
+
+	row1=$(wc -l < $tmp) # Find the number of rows in matrix 1
+	col2=$(head -1 $tmp2 | wc -w) # Find the number of cols in matrix 2
+
+	# For each row in matrix 1
+	for ((i=0; i<row1; i++))
+	do
+		# For each col in matrix 2
+		for ((j=0; j<col2; j++))
+		do
+			sum=0
+			# We calculate the sum product of row1 and col2
+			for ((k=0; k<col1; k++))
+			do
+				# matrix1 and matrix2 are one dimensional
+				# Therefore we need to convert 2 dimensional coordinates
+				# into one dimensional index
+				a=${matrix1[$((i * col1 + k))]}
+				b=${matrix2[$((k * col2 + j))]}
+				prod=$((a * b))
+				sum=$((sum + prod))
+			done
+
+			printf "%d" $sum
+
+			# Only print [TAB] if not end of line
+			if [ $j != $((col2 - 1)) ]
+			then
+				printf "\t"
+			fi
+		done
+		printf "\n"
+	done
+}
+
+# Add two matrices of equal size
+# This is done by looping through the matrix index,
+# obtaining the elements from the matrix using head and cut
+# and then performing the addition
+add() {
+
+	# Check if we have the right number of arguments
+	if [ $# -gt 2 ] # If args is greater than 2
+        then
+                echo "Failed: too many arguments." 1>&2
+                exit 1
+        elif [ $# == 1 ] # If only one arg
+        then
+		# Use arg 1
+                tmp=$1
+
+		# Take second arg from stdin and put it in tempfile2
+                cat > "tempfile2"
+        elif [ $# == 0 ] # If there's no arguments
+        then
+                echo "Failed: no argument." 1>&2
+		exit 1
+        else
+		# Otherwise just use arg 1 and arg 2
+                tmp=$1
+                tmp2=$2
+        fi
+
+	# Check if matrix 1 and matrix 2 have the same dimensions
+	row1=$(wc -l < $tmp) # Find the number of rows in matrix 1
+        col1=$(head -1 $tmp | wc -w) #Find the number of cols in matrix 1
+        row2=$(wc -l < $tmp2) # Find the number of rows in matrix 2
+        col2=$(head -1 $tmp2 | wc -w) # Find the number of cols in matrix 2
+
+	# If row1 is not the same as row2 or col1 is not the same as col2
+	# Matrix 1 and matrix 2 have different dimensions
+        if [ $row1 != $row2 ] || [ $col1 != $col2 ]
+        then
+                echo "Failed: dimensions do not match." 1>&2
+                exit 1
+        fi
+
+	for ((i=1; i<=row1; i++))
+	do
+		
+		for ((j=1; j<=col1; j++))
+		do
+			# Cut the jth element of row i
+			a=$(head -$i $tmp | tail -1 | cut -f $j)
+			b=$(head -$i $tmp2 | tail -1 | cut -f $j)
+
+			sum=$((a + b))
+			printf "%d" $sum
+
+			# Only print [TAB] when not end of line
+			if [ $j != $col1 ]
+			then
+				printf "\t"
+			fi
+		done
+		printf "\n"
+	done
+}
+
+$1 "${@:2}"
+exit 0
