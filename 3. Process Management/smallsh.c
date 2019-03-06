@@ -138,14 +138,15 @@ void parseInput(struct Cmd* cmd, char* input) {
      * input string with spaces ' ' as separators.
      *
      * First we're going to take the command and the arguments. The while loop
-     * is going to stop whenever we encounter special characters '<' and '>' or
+     * is going to stop whenever we encounter special characters '<','>','#' or
      * there is no more words in input string (token == NULL). We are ignoring
      * '&' because it doesn't always mean background process (ex. echo)
      */
     char* token = strtok(input, " ");
     while (token != NULL &&
            token[0] != '<' &&
-           token[0] != '>') {
+           token[0] != '>' &&
+           token[0] != '#') {
         cmd->argv[cmd->nArgs] = token;
         cmd->nArgs++;
         token = strtok(NULL, " ");
@@ -156,7 +157,7 @@ void parseInput(struct Cmd* cmd, char* input) {
      * The input output is in no particular order so we're
      * going to use a while loop
      */
-    while (token != NULL && token[0] != '&') {
+    while (token != NULL && token[0] != '&' && token[0] != '#') {
 
         // If token is '<' then there's an input redirection
         if (token[0] == '<') {
@@ -197,9 +198,9 @@ void parseInput(struct Cmd* cmd, char* input) {
     if (token != NULL && token[0] == '&') {
         cmd->background = true;
 
-    // If token is NULL, it doesn't mean that the command is not a background process
+    // If token is not '&', it doesn't mean that the command is not a background process
     // We need to check if we have taken '&' as an argument earlier
-    } else if (token == NULL) {
+    } else if (cmd->nArgs) {
         if (!strcmp(cmd->argv[cmd->nArgs - 1], "&")) {
 
             // Given that the last argument is '&', it is a background process only if
@@ -538,8 +539,8 @@ void main() {
         // Parse line entered into command struct
         parseInput(cmd, input);
 
-        // If input is a comment line
-        if (cmd->argv[0][0] == '#') {
+        // If there's no command to be evaluated
+        if (!cmd->nArgs) {
 
             // Free up memory allocated to prevent memory leak
             // Continue the while loop
