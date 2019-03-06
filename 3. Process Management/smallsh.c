@@ -272,7 +272,7 @@ void runBuiltIn(struct Cmd* cmd, char* lineEntered, char* input) {
     }
 
     // If we made this far then process terminates successfully
-    // Set exit status to 0 and termSignal to -1 (process is not terminated)
+    // Set exit status to 0 and termSignal to -1 (process is not terminated by signal)
     exitStatus = 0;
     termSignal = -1;
 }
