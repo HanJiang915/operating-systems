@@ -335,7 +335,7 @@ void checkBackgroundProcess() {
         // The flag "WNOHANG" means it does not block the parent process (With No Hang)
         childPid = waitpid(backgroundPid[i-1], &childExitMethod, WNOHANG);
 
-        if (childPid) { // If the has been terminated
+        if (childPid) { // If the child process has been terminated
 
             // Kill that process
             kill(childPid, SIGKILL);
