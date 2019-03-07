@@ -407,16 +407,6 @@ char* getInput() {
 // This function performs input redirection
 void redirectInput(struct Cmd* cmd, char* lineEntered, char* input) {
 
-    char cwd[256];          // Holds the current working directory
-    char newFilePath[256];  // Holds the path of the input file
-
-    // Initialize cwd and newFilePath to prevent garbage values
-    memset(cwd, '\0', sizeof(cwd));
-    memset(newFilePath, '\0', sizeof(newFilePath));
-
-    // Get current working directory
-    getcwd(cwd, sizeof(cwd));
-
     // If command is background process or
     // if command is foreground process and the user specifies input redirection
     if ((cmd->background == true && !fgonly) ||
@@ -433,12 +423,8 @@ void redirectInput(struct Cmd* cmd, char* lineEntered, char* input) {
         // If input file is specified
         } else {
 
-            // Create the file path by combining current working directory
-            // with the name of the input file
-            sprintf(newFilePath, "%s/%s", cwd, cmd->inputFile);
-
             // Open up the input file as read-only
-            int file_descriptor = open(newFilePath, O_RDONLY);
+            int file_descriptor = open(cmd->inputFile, O_RDONLY);
 
             if (file_descriptor < 0) { // If fail to open input file
 
@@ -462,16 +448,6 @@ void redirectInput(struct Cmd* cmd, char* lineEntered, char* input) {
 // This function performs output redirection
 void redirectOutput(struct Cmd* cmd, char* lineEntered, char* input) {
 
-    char cwd[256];          // Holds the current working directory
-    char newFilePath[256];  // Holds the path of the ouput file
-
-    // Initialize cwd and newFilePath to prevent garbage values
-    memset(cwd, '\0', sizeof(cwd));
-    memset(newFilePath, '\0', sizeof(newFilePath));
-
-    // Get current working directory
-    getcwd(cwd, sizeof(cwd));
-
     // If command is background process or
     // if command is foreground process and the user specifies output redirection
     if ((cmd->background == true && !fgonly) ||
@@ -488,12 +464,8 @@ void redirectOutput(struct Cmd* cmd, char* lineEntered, char* input) {
         // If output file is specified
         } else {
 
-            // Create the file path by combining current working directory
-            // with the name of the ouput file
-            sprintf(newFilePath, "%s/%s", cwd, cmd->outputFile);
-
             // Create the output file or overwrite it if it already exists
-            int file_descriptor = open(newFilePath, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+            int file_descriptor = open(cmd->outputFile, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
 
             if (file_descriptor < 0) { // If fail to open output file
 
