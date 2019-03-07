@@ -380,6 +380,7 @@ char* getInput() {
 
         // Get the input from the user
         printf(": ");
+        fflush(stdout);
         numCharsEntered = getline(&lineEntered, &bufferSize, stdin);
 
         // If user input is invalid, clear error in stdin and repeat the process
@@ -399,7 +400,6 @@ char* getInput() {
 
     // Remove the trailing newline '\n' from our input string
     lineEntered[numCharsEntered - 1] = '\0';
-    fflush(stdout);
 
     return lineEntered;
 }
