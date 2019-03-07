@@ -535,7 +535,7 @@ void main() {
         // If command is not a built-in command
         } else {
 
-            // Spawn a new process
+            // Fork that shit
             spawnPid = fork();
             switch (spawnPid) {
 
