@@ -509,7 +509,7 @@ void main() {
     while(1) {
 
         // Get input from user and expand all instances of "$$" into process ID
-        lineEntered = getInput(cmd);
+        lineEntered = getInput();
         input = str_replace(lineEntered, "$$", pidString);
 
         // Parse line entered into command struct
