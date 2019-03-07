@@ -157,7 +157,7 @@ void parseInput(struct Cmd* cmd, char* input) {
      * The input output is in no particular order so we're
      * going to use a while loop
      */
-    while (1) {
+    while (token) {
 
         // If token is '<' then there's an input redirection
         if (token[0] == '<') {
