@@ -157,7 +157,7 @@ void parseInput(struct Cmd* cmd, char* input) {
      * The input output is in no particular order so we're
      * going to use a while loop
      */
-    while (token != NULL && token[0] != '&' && token[0] != '#') {
+    while (1) {
 
         // If token is '<' then there's an input redirection
         if (token[0] == '<') {
@@ -184,6 +184,10 @@ void parseInput(struct Cmd* cmd, char* input) {
                 strcpy(cmd->outputFile, token);
                 token = strtok(NULL, " ");
             }
+
+        // If token is neither '>' nor '<', exit the while loop
+        } else {
+            break;
         }
     }
 
