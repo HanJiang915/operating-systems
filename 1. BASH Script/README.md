@@ -118,6 +118,6 @@ $ ./p1gradingscript > grading_result.username
 ```
 To compare yours to a perfect solution, you can download here a completely correct run of the script that shows what you should get if everything is working correctly:
 
-p1perfectoutput
+[p1perfectoutput](https://github.com/IvanHalim/operating-systems/blob/master/1.%20BASH%20Script/p1perfectoutput)
 
 The p1gradingscript itself is a good resource for seeing how some of the more complex shell scripting commands work, too.
