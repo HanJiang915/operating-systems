@@ -1,6 +1,6 @@
 /*********************************************************************************
  * Author: Ivan Timothy Halim
- * Description: This is a text-driven adventure style game where the goalis to get to the end.
+ * Description: This is a text-driven adventure style game where the goal is to get to the end.
  * This particular file reads the created game files and allows playthrough of the game. It also
  * has a time function
  * Date: 2/15/2019
