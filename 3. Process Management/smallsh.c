@@ -550,8 +550,10 @@ void main() {
 
                 // Child process
                 case 0:
-                    // Enable process termination by SIGINT
-                    enableSIGINT();
+                    // Enable process termination by SIGINT if it is a foreground process
+                    if (cmd->background == false || fgonly) {
+                        enableSIGINT();
+                    }
 
                     // Perform input output redirection
                     redirectInput(cmd, lineEntered, input);
