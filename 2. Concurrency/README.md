@@ -8,7 +8,7 @@ In the game, the player will begin in the "starting room" and will win the game 
 
 During the game, the player can also enter a command that returns the current time - this functionality utilizes mutexes and multithreading.
 
-To see the requirements for the project, read [req.md](https://github.com/IvanHalim/operating-systems/blob/master/3.%20Process%20Management/req.md).
+To see the requirements for the project, read [req.md](https://github.com/IvanHalim/operating-systems/blob/master/2.%20Concurrency/req.md).
 
 ### Compilation
 
