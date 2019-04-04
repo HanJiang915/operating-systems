@@ -5,7 +5,7 @@ Handles all other commands by spawning child processes to perform execvp().
 
 USAGE: command [arg1 arg2 ...] [< input_file] [> output_file] [&]
 
-To see the requirements for the project, read [req.md](/req.md).
+To see the requirements for the project, read [req.md](https://github.com/IvanHalim/operating-systems/blob/master/3.%20Process%20Management/req.md).
 
 # Compilation
 
