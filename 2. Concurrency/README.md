@@ -14,8 +14,8 @@ To see the requirements for the project, read [req.md](https://github.com/IvanHa
 
 To compile, type:
 ```
-$ gcc –o smithj.buildrooms smithj.buildrooms.c
-$ smithj.buildrooms
-$ gcc –o smithj.adventure smithj.adventure.c -lpthread
-$ smithj.adventure
+$ gcc –o halimi.buildrooms halimi.buildrooms.c
+$ halimi.buildrooms
+$ gcc –o halimi.adventure halimi.adventure.c -lpthread
+$ halimi.adventure
 ```
