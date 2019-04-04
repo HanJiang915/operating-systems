@@ -1,6 +1,6 @@
 # smallsh - CS 344
 
-A basic shell that supports three built-in commands: exit, cd, and status.\n
+A basic shell that supports three built-in commands: exit, cd, and status.\
 Handles all other commands by spawning child processes to perform execvp().
 
 USAGE: command [arg1 arg2 ...] [< input_file] [> output_file] [&]
