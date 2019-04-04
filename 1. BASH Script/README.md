@@ -34,7 +34,7 @@ Here is a brief example of what the output should look like.
 
 ```bash
 $ cat m1
-1\t2	3	4
+1	2	3	4
 5	6	7	8
 $ cat m2
 1	2
@@ -42,9 +42,9 @@ $ cat m2
 5	6
 7	8
 $ ./matrix dims m1
-2\t4
+2	4
 $ cat m2 | ./matrix dims
-4\t2
+4	2
 $ ./matrix add m1 m1
 2	4	6	8
 10	12	14	16
