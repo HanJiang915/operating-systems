@@ -10,5 +10,6 @@ To see the requirements for the project, read [req.md](https://github.com/IvanHa
 ### Compilation
 
 To compile, type:
-
-gcc smallsh.c -o smallsh
+```
+$ gcc smallsh.c -o smallsh
+```
