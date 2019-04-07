@@ -303,30 +303,33 @@ void enableSIGINT() {
  */
 void handleSIGTSTP(int signo) {
 
-    char message[64];
-    memset(message, '\0', sizeof(message));
-
     // If the shell is not in foreground-only mode
     // Enter foreground-only mode
     if (!fgonly) {
         fgonly = 1;
-        sprintf(message, "\nEntering foreground-only mode (& is now ignored)\n");
-        write(STDOUT_FILENO, message, strlen(message) * sizeof(char));
+        char* message = "\nEntering foreground-only mode (& is now ignored)\n";
+        write(STDOUT_FILENO, message, strlen(message));
 
     // If the shell is in foreground-only
     // Exit foreground-only mode
     } else {
         fgonly = 0;
-        sprintf(message, "\nExiting foreground-only mode\n");
-        write(STDOUT_FILENO, message, strlen(message) * sizeof(char));
+        char* message = "\nExiting foreground-only mode\n";
+        write(STDOUT_FILENO, message, strlen(message));
     }
 }
 
 // This function catches SIGTSTP signal and process it using handleSIGTSTP function
-void catchSIGTSTP() {
-    struct sigaction SIGTSTP_action = {0};
+void enableSIGTSTP() {
+    struct sigaction SIGTSTP_action = {{0}};
     SIGTSTP_action.sa_handler = handleSIGTSTP;
     sigfillset(&SIGTSTP_action.sa_mask);
+    sigaction(SIGTSTP, &SIGTSTP_action, NULL);
+}
+
+void disableSIGTSTP() {
+    struct sigaction SIGTSTP_action = {{0}};
+    SIGTSTP_action.sa_handler = SIG_IGN;
     sigaction(SIGTSTP, &SIGTSTP_action, NULL);
 }
 
@@ -495,7 +498,7 @@ void main() {
     disableSIGINT();
 
     // Enable SIGTSTP to enter/exit foreground-only mode
-    catchSIGTSTP();
+    enableSIGTSTP();
 
     struct Cmd* cmd = cmdCreate();  // Create a new command struct
     pid_t spawnPid;                 // Holds the process id created by fork()
@@ -553,6 +556,10 @@ void main() {
 
                 // Child process
                 case 0:
+
+                    // Disable SIGTSTP to enter/exit foreground-only mode
+                    disableSIGTSTP();
+
                     // Enable process termination by SIGINT if it is a foreground process
                     if (cmd->background == false || fgonly) {
                         enableSIGINT();
