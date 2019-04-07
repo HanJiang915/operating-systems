@@ -303,19 +303,22 @@ void enableSIGINT() {
  */
 void handleSIGTSTP(int signo) {
 
+    char message[64];
+    memset(message, '\0', sizeof(message));
+
     // If the shell is not in foreground-only mode
     // Enter foreground-only mode
     if (!fgonly) {
         fgonly = 1;
-        printf("\nEntering foreground-only mode (& is now ignored)\n");
-        fflush(stdout);
+        sprintf(message, "\nEntering foreground-only mode (& is now ignored)\n");
+        write(STDOUT_FILENO, message, strlen(message) * sizeof(char));
 
     // If the shell is in foreground-only
     // Exit foreground-only mode
     } else {
         fgonly = 0;
-        printf("\nExiting foreground-only mode\n");
-        fflush(stdout);
+        sprintf(message, "\nExiting foreground-only mode\n");
+        write(STDOUT_FILENO, message, strlen(message) * sizeof(char));
     }
 }
 
