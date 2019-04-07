@@ -327,6 +327,8 @@ void enableSIGTSTP() {
     sigaction(SIGTSTP, &SIGTSTP_action, NULL);
 }
 
+// This function prevents a child process from entering/exiting foreground-only mode
+// when given a SIGTSTP signal
 void disableSIGTSTP() {
     struct sigaction SIGTSTP_action = {{0}};
     SIGTSTP_action.sa_handler = SIG_IGN;
