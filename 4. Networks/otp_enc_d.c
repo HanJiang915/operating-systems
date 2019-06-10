@@ -270,6 +270,7 @@ int main(int argc, char *argv[]) {
             // Fail to spawn a new process
             case -1:
                 fprintf(stderr, "otp_enc_d: ERROR fork failed\n");
+                close(establishedConnectionFD);
                 break;
 
             // Child process
