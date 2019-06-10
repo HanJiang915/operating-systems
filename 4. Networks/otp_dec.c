@@ -45,11 +45,11 @@ int readFile(char* filename, char readBuffer[], int size) {
 // This function sends a message to the server
 int sendFile(int file_descriptor, char sendBuffer[], int size) {
 
-    // Add '@' to our message which is going to be our
-    // identifier for EOF.
+    // Add newline '\n' to our message which is going to be our
+    // new message. Newline is used as an identifier for EOF.
     char message[size+2];
     memset(message, '\0', sizeof(message));
-    sprintf(message, "%s@", sendBuffer);
+    sprintf(message, "%s\n", sendBuffer);
 
     // Sends the message
     int charsWritten;
@@ -71,7 +71,7 @@ int sendFile(int file_descriptor, char sendBuffer[], int size) {
     }
 
     // Return the number of characters sent
-    // Subtract 1 for '@'
+    // Subtract 1 for newline
     return charsWritten-1;
 }
 
@@ -86,7 +86,7 @@ int receiveFile(int file_descriptor, char completeMessage[], int size) {
     memset(completeMessage, '\0', size);
 
     // Continues the loop as long as we haven't found the terminal
-    while (strstr(completeMessage, "@") == NULL) {
+    while (strstr(completeMessage, "\n") == NULL) {
 
         // Clear the buffer and get the next chunk of message
         memset(readBuffer, '\0', sizeof(readBuffer));
@@ -95,17 +95,19 @@ int receiveFile(int file_descriptor, char completeMessage[], int size) {
         // Add that chunk to our complete message
         strcat(completeMessage, readBuffer);
 
-        if (charsRead < 0) { // Error
+        // Exit the loop if there's an error
+        // or if there's no more messages
+        if (charsRead < 0) {
             error("otp_dec: ERROR fail to read file", 2);
-        } else if (charsRead == 0) { // No more message
-            break; // Exit loop
+        } else if (charsRead == 0) {
+            break;
         }
     }
 
-    // Find the terminal location and remove the newline
-    int terminalLocation = strstr(completeMessage, "@") - completeMessage;
+    int terminalLocation = strstr(completeMessage, "\n") - completeMessage;
     completeMessage[terminalLocation] = '\0';
 
+    // Find the terminal location and remove the newline
     return strlen(completeMessage);
 }
 
