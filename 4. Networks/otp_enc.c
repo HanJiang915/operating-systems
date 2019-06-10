@@ -1,16 +1,3 @@
-/*********************************************************************************
- * Filename: otp_enc.c
- * Author:   Ivan Timothy Halim
- * Date:     6/10/2019
- *
- * This program connects to otp_enc_d, and asks it to perform a one-time pad style
- * encryption. It sends a plaintext and a key to the otp_enc_d server and receives
- * back a ciphertext. It then outputs the ciphertext to stdout or to an output file
- * if specified. Can be run in the background or foreground.
- * 
- * USAGE: otp_enc [plaintext] [key] [port] [> output_file] [&]
- *********************************************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

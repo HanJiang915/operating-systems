@@ -1,16 +1,3 @@
-/*********************************************************************************
- * Filename: keygen.c
- * Author:   Ivan Timothy Halim
- * Date:     6/10/2019
- *
- * This program creates a key file of specified length. The characters in the file
- * generated will be any of the 27 allowed characters, generated using the standard
- * UNIX randomization methods. It then outputs the key to stdout or to the output
- * file if specified.
- * 
- * USAGE: keygen [length] [> output file]
- *********************************************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
