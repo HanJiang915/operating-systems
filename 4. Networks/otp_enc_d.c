@@ -1,3 +1,15 @@
+/*********************************************************************************
+ * Filename: otp_enc_d.c
+ * Author:   Ivan Timothy Halim
+ * Date:     6/10/2019
+ *
+ * This program runs in the background as a daemon. It will listen on a particular
+ * port, accepts a plaintext and a key from the client, encrypts the plaintext 
+ * using the key and sends a ciphertext back to the client.
+ * 
+ * USAGE: otp_enc_d [port] &
+ *********************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
