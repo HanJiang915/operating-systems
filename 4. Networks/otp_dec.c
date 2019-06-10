@@ -46,7 +46,7 @@ int readFile(char* filename, char readBuffer[], int size) {
 int sendFile(int file_descriptor, char sendBuffer[], int size) {
 
     // Add newline '\n' to our message which is going to be our
-    // new message. Newline is used as an identifier for EOF.
+    // identifier for EOF.
     char message[size+2];
     memset(message, '\0', sizeof(message));
     sprintf(message, "%s\n", sendBuffer);
@@ -95,19 +95,17 @@ int receiveFile(int file_descriptor, char completeMessage[], int size) {
         // Add that chunk to our complete message
         strcat(completeMessage, readBuffer);
 
-        // Exit the loop if there's an error
-        // or if there's no more messages
-        if (charsRead < 0) {
+        if (charsRead < 0) { // Error
             error("otp_dec: ERROR fail to read file", 2);
-        } else if (charsRead == 0) {
-            break;
+        } else if (charsRead == 0) { // No more message
+            break; // Exit loop
         }
     }
 
+    // Find the terminal location and remove the newline
     int terminalLocation = strstr(completeMessage, "\n") - completeMessage;
     completeMessage[terminalLocation] = '\0';
 
-    // Find the terminal location and remove the newline
     return strlen(completeMessage);
 }
 

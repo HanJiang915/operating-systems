@@ -46,7 +46,7 @@ int readFile(char* filename, char readBuffer[], int size) {
 int sendFile(int file_descriptor, char sendBuffer[], int size) {
 
     // Add newline '\n' to our message which is going to be our
-    // new message. Newline is used as an identifier for EOF.
+    // identifier for EOF.
     char message[size+2];
     memset(message, '\0', sizeof(message));
     sprintf(message, "%s\n", sendBuffer);
