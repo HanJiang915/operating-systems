@@ -37,11 +37,11 @@ void error(const char *msg, int exitStatus) {
 // This function sends a message to the client
 int sendFile(int file_descriptor, char sendBuffer[], int size) {
 
-    // Add newline '\n' to our message which is going to be our
-    // new message. Newline is used as an identifier for EOF.
+    // Add '@' to our message which is going to be our
+    // identifier for EOF.
     char message[size+2];
     memset(message, '\0', sizeof(message));
-    sprintf(message, "%s\n", sendBuffer);
+    sprintf(message, "%s@", sendBuffer);
 
     // Sends the message
     int charsWritten;
@@ -63,7 +63,7 @@ int sendFile(int file_descriptor, char sendBuffer[], int size) {
     }
 
     // Return the number of characters sent
-    // Subtract 1 for newline
+    // Subtract 1 for '@'
     return charsWritten-1;
 }
 
@@ -78,7 +78,7 @@ int receiveFile(int file_descriptor, char completeMessage[], int size) {
     memset(completeMessage, '\0', size);
 
     // Continues the loop as long as we haven't found the terminal
-    while (strstr(completeMessage, "\n") == NULL) {
+    while (strstr(completeMessage, "@") == NULL) {
 
         // Clear the buffer and get the next chunk of message
         memset(readBuffer, '\0', sizeof(readBuffer));
@@ -97,7 +97,7 @@ int receiveFile(int file_descriptor, char completeMessage[], int size) {
     }
 
     // Find the terminal location and remove the newline
-    int terminalLocation = strstr(completeMessage, "\n") - completeMessage;
+    int terminalLocation = strstr(completeMessage, "@") - completeMessage;
     completeMessage[terminalLocation] = '\0';
 
     return strlen(completeMessage);
