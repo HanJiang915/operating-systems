@@ -1,3 +1,16 @@
+/*********************************************************************************
+ * Filename: otp_dec.c
+ * Author:   Ivan Timothy Halim
+ * Date:     6/10/2019
+ *
+ * This program connects to otp_dec_d, and asks it to perform a one-time pad style
+ * decryption. It sends a ciphertext and a key to the otp_dec_d server and receives
+ * back a plaintext. It then outputs the plaintext to stdout or to an output file
+ * if specified. Can be run in the background or foreground.
+ * 
+ * USAGE: otp_dec [ciphertext] [key] [port] [> output_file] [&]
+ *********************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
