@@ -1,7 +1,7 @@
 /*********************************************************************************
  * Filename: keygen.c
  * Author:   Ivan Timothy Halim
- * Date:     6/10/2019
+ * Date:     3/17/2019
  *
  * This program creates a key file of specified length. The characters in the file
  * generated will be any of the 27 allowed characters, generated using the standard

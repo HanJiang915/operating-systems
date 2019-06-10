@@ -1,7 +1,7 @@
 /*********************************************************************************
  * Filename: otp_enc_d.c
  * Author:   Ivan Timothy Halim
- * Date:     6/10/2019
+ * Date:     3/17/2019
  *
  * This program runs in the background as a daemon. It will listen on a particular
  * port, accepts a plaintext and a key from the client, encrypts the plaintext 

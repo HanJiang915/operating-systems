@@ -1,7 +1,7 @@
 /*********************************************************************************
  * Filename: otp_dec.c
  * Author:   Ivan Timothy Halim
- * Date:     6/10/2019
+ * Date:     3/17/2019
  *
  * This program connects to otp_dec_d, and asks it to perform a one-time pad style
  * decryption. It sends a ciphertext and a key to the otp_dec_d server and receives

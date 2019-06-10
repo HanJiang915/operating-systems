@@ -1,7 +1,7 @@
 /*********************************************************************************
  * Filename: otp_enc.c
  * Author:   Ivan Timothy Halim
- * Date:     6/10/2019
+ * Date:     3/17/2019
  *
  * This program connects to otp_enc_d, and asks it to perform a one-time pad style
  * encryption. It sends a plaintext and a key to the otp_enc_d server and receives
