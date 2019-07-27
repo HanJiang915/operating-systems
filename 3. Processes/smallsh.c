@@ -337,7 +337,7 @@ void disableSIGTSTP() {
 
 // This function checks if any background process has terminated
 void checkBackgroundProcess() {
-    int i, j;               // Indexes
+    int i;                  // Indexes
     pid_t childPid;         // Holds the child PID
     int childExitMethod;    // Holds the child exit method
 
@@ -365,11 +365,9 @@ void checkBackgroundProcess() {
             }
             fflush(stdout);
 
-            // Shift everything on the right side to the left (yes, this is inefficient)
+            // Shift everything on the right side to the left
+            backgroundPid[i-1] = backgroundPid[nPid-1];
             nPid--;
-            for (j = i-1; j < nPid; j++) {
-                backgroundPid[j] = backgroundPid[j+1];
-            }
         }
     }
 }
